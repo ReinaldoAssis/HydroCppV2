@@ -111,6 +111,10 @@ button {
   color: #fff;
 }
 
+.mantine-NumberInput-label {
+  color: #fff;
+}
+
 .mantine-Drawer-drawer {
   background-color: rgb(30, 30, 30);
 }
