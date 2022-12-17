@@ -149,10 +149,19 @@ export default function Simulation2D(props: SimulationProps) {
   }
 
   function randomSim() {
+    console.log("random");
     let s = "";
+    if (globalState.rndSize == undefined) globalState.rndSize = 10;
+    for (let i = 0; i < globalState.rndSize; i++) {
+      let rnd = Math.random();
+      if (rnd < 0.5) s += "H";
+      else s += "P";
+    }
+    setSeq(s);
   }
 
   globalState.example_sim = exampleSim;
+  globalState.random_sim = randomSim;
   useEffect(() => {}, [seq, behavior]);
 
   let size = decompose(seq.length);
@@ -258,6 +267,18 @@ export default function Simulation2D(props: SimulationProps) {
               precision={2}
               onChange={(value) => setScale(value ?? 1.5)}
             />
+
+            <NumberInput
+              defaultValue={10}
+              placeholder="10"
+              label="Rnd Size"
+              variant="filled"
+              radius="xs"
+              size="md"
+              step={1}
+              onChange={(value) => (globalState.rndSize = value ?? 10)}
+            />
+
             <Text size="xl">
               Score{" "}
               {Math.round((protein.process_score() + Number.EPSILON) * 100) /

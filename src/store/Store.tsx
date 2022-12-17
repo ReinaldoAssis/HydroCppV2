@@ -8,6 +8,7 @@ export interface State {
   set_matrix_size?: (s: string) => void;
   random_sim?: () => void;
   text_file?: string;
+  rndSize?: number;
 }
 
 export let globalState: State = {
