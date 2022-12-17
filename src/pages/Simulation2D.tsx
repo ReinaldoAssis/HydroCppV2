@@ -1,9 +1,19 @@
 import React, { MutableRefObject, RefObject, useRef } from "react";
 import { useEffect } from "react";
 import p5 from "p5";
-import { NumberInput, Select, Stack, Switch, Text } from "@mantine/core";
+import {
+  Drawer,
+  Group,
+  NumberInput,
+  Select,
+  Stack,
+  Switch,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
 
 import Protein, {
+  decompose,
   hydro,
   HydroMatrix,
   PROTEIN_DISTRIBUTION,
@@ -125,8 +135,10 @@ export default function Simulation2D(props: SimulationProps) {
   const [grid, setGrid] = React.useState(true);
   const [behavior, setBehavior] = React.useState("Sequential");
   const [scale, setScale] = React.useState(2.5);
+  const [opened, setOpened] = React.useState(false);
 
   const rf = React.useRef();
+  const theme = useMantineTheme();
 
   useEffect(() => {}, [seq, behavior]);
 
@@ -140,9 +152,12 @@ export default function Simulation2D(props: SimulationProps) {
     console.log(err);
   }
 
+  let size = decompose(seq.length);
+
   //TODO: add custom size
   let protein: Protein = new Protein(
-    15,
+    size.width,
+    size.height,
     logger,
     seq,
     behavior == "Path"
@@ -188,6 +203,15 @@ export default function Simulation2D(props: SimulationProps) {
             >
               Clear
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                setOpened(!opened);
+              }}
+              style={{ marginBottom: 10 }}
+            >
+              Sequence
+            </button>
             <Switch
               label="Vibrant"
               size="md"
@@ -226,6 +250,26 @@ export default function Simulation2D(props: SimulationProps) {
           </Stack>
         </div>
       </div>
+      <Drawer
+        overlayColor={theme.colors.dark[9]}
+        overlayOpacity={0.55}
+        overlayBlur={0.5}
+        size="xs"
+        title=""
+        opened={opened}
+        position="bottom"
+        onClose={() => setOpened(false)}
+      >
+        <Group style={{ marginLeft: 20 }}>
+          {seq.split("").map((x) => {
+            return (
+              <Text size="xl" color={x.toLowerCase() == "h" ? "blue" : "red"}>
+                {x.toUpperCase()}
+              </Text>
+            );
+          })}
+        </Group>
+      </Drawer>
     </>
   );
 }
