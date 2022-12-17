@@ -1,4 +1,4 @@
-import React, { MutableRefObject, RefObject, useRef } from "react";
+import React, { MutableRefObject, RefObject, useContext, useRef } from "react";
 import { useEffect } from "react";
 import p5 from "p5";
 import {
@@ -18,6 +18,7 @@ import Protein, {
   HydroMatrix,
   PROTEIN_DISTRIBUTION,
 } from "../processing/Protein";
+import { globalState } from "../store/Store";
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 675;
@@ -140,6 +141,12 @@ export default function Simulation2D(props: SimulationProps) {
   const rf = React.useRef();
   const theme = useMantineTheme();
 
+  function exampleSim(s: string) {
+    setSeq(s);
+    console.log("EXAMPLE SIM");
+  }
+
+  globalState.example_sim = exampleSim;
   useEffect(() => {}, [seq, behavior]);
 
   function forceUpdate() {

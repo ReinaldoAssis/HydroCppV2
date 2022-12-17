@@ -1,8 +1,14 @@
 import React from "react";
 
-export const Context = React.createContext({});
+export interface State {
+  seq?: string;
+  vibrant?: boolean;
+  example_sim?: (s: string) => void;
+  go_home?: () => void;
+  set_matrix_size?: (s: string) => void;
+}
 
-const initialState = {
+export let globalState: State = {
   seq: "ppphppphhhppphp",
   vibrant: false,
   example_sim: (s: string) => {},
@@ -10,16 +16,12 @@ const initialState = {
   set_matrix_size: () => {},
 };
 
-interface Props {
-  children: React.ReactNode;
-}
+// interface Props {
+//   children: React.ReactNode;
+// }
 
-const Store = ({ children, ...props }: Props) => {
-  const [state, setState] = React.useState(initialState);
+// const Store = ({ children, ...props }: Props) => {
+//   return <>{children}</>;
+// };
 
-  return (
-    <Context.Provider value={[state, setState]}>{children}</Context.Provider>
-  );
-};
-
-export default Store;
+// export default Store;
