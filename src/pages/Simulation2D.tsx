@@ -19,6 +19,7 @@ import Protein, {
   PROTEIN_DISTRIBUTION,
 } from "../processing/Protein";
 import { globalState } from "../store/Store";
+import { showNotification } from "@mantine/notifications";
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 675;
@@ -51,13 +52,14 @@ function Engine(props: {
     if (document.getElementsByClassName("p5Canvas").length == 1)
       document.getElementsByClassName("p5Canvas")[0].remove();
 
+    //       // test if already initialized
     if (
       myp5 == null &&
       p5ref.current != null &&
       document.getElementsByClassName("p5Canvas").length == 0
-    )
-      //       // test if already initialized
+    ) {
       myp5 = new p5(Sketch, p5ref.current) as any;
+    }
 
     //     console.log(this.sequence);
   }, [props.matrix, props.vibrant, props.grid]);
@@ -133,8 +135,8 @@ interface SimulationProps {
 export default function Simulation2D(props: SimulationProps) {
   const [seq, setSeq] = React.useState(props.sequence);
   const [vibrant, setVibrant] = React.useState(false);
-  const [grid, setGrid] = React.useState(true);
-  const [behavior, setBehavior] = React.useState("Sequential");
+  const [grid, setGrid] = React.useState(false);
+  const [behavior, setBehavior] = React.useState("Path");
   const [scale, setScale] = React.useState(2.5);
   const [opened, setOpened] = React.useState(false);
 
@@ -146,11 +148,18 @@ export default function Simulation2D(props: SimulationProps) {
     console.log("EXAMPLE SIM");
   }
 
+  function randomSim() {
+    let s = "";
+  }
+
   globalState.example_sim = exampleSim;
   useEffect(() => {}, [seq, behavior]);
 
+  let size = decompose(seq.length);
+
   function forceUpdate() {
-    let aux = props.sequence;
+    let aux = globalState.text_file ?? props.sequence;
+
     //setSeq("");
     setSeq(aux);
   }
@@ -158,8 +167,6 @@ export default function Simulation2D(props: SimulationProps) {
   function logger(err: string) {
     console.log(err);
   }
-
-  let size = decompose(seq.length);
 
   //TODO: add custom size
   let protein: Protein = new Protein(
@@ -204,6 +211,7 @@ export default function Simulation2D(props: SimulationProps) {
             <button
               type="button"
               onClick={() => {
+                globalState.text_file = undefined;
                 setSeq("");
               }}
               style={{ marginBottom: 10 }}
@@ -235,7 +243,8 @@ export default function Simulation2D(props: SimulationProps) {
               data={["Sequential", "Path"]}
               label="Behavior"
               onChange={(txt) => setBehavior(txt ?? "")}
-              placeholder="Sequential"
+              placeholder="Path"
+              defaultValue="Path"
             ></Select>
 
             <NumberInput
@@ -254,6 +263,7 @@ export default function Simulation2D(props: SimulationProps) {
               {Math.round((protein.process_score() + Number.EPSILON) * 100) /
                 100}{" "}
             </Text>
+            <Text size="xl">Size {seq.length}</Text>
           </Stack>
         </div>
       </div>
