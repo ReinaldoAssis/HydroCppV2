@@ -9,6 +9,7 @@ export interface State {
   random_sim?: () => void;
   text_file?: string;
   rndSize?: number;
+  show_sequence?: () => void;
 }
 
 export let globalState: State = {
