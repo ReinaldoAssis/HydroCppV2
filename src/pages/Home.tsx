@@ -1,11 +1,13 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
-import { Dropzone } from "@mantine/dropzone";
+import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import { Group, Text, useMantineTheme } from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons";
 import { tauri } from "@tauri-apps/api";
 import { WebviewWindow } from "@tauri-apps/api/window";
+import { showNotification } from "@mantine/notifications";
+import { globalState } from "../store/Store";
 
 interface HomeProps {
   tabFunction: React.Dispatch<React.SetStateAction<string | null>>;
@@ -24,6 +26,10 @@ export default function Home(props: HomeProps) {
   async function run() {
     props.tabFunction("simulation");
     //const sim = new WebviewWindow("simulation");
+  }
+
+  async function setSequenceFile(f: FileWithPath) {
+    globalState.text_file = await f.text();
   }
 
   const theme = useMantineTheme();
@@ -56,8 +62,15 @@ export default function Home(props: HomeProps) {
         {/* ----------------------------------------- */}
 
         <Dropzone
-          onDrop={(files) => console.log("accepted files", files)}
-          onReject={(files) => console.log("rejected files", files)}
+          accept={["text/plain"]}
+          onDrop={(files) => setSequenceFile(files[0])}
+          onReject={(files) =>
+            showNotification({
+              title: "Rejected",
+              message: "Only text files are allowed",
+              color: "red",
+            })
+          }
           maxSize={3 * 1024 ** 2}
           style={{
             marginTop: 30,
