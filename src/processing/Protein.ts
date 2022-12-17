@@ -116,10 +116,10 @@ export default class Protein {
     mode?: PROTEIN_DISTRIBUTION
   ): boolean {
     if (start == null) start = 0;
-    if (sequence.length + start > this._width * this._width) {
-      this.err(`The sequence is too long for the matrix`);
-      return false;
-    }
+    // if (sequence.length + start > this._width * this._width) {
+    //   this.err(`The sequence is too long for the matrix`);
+    //   return false;
+    // }
 
     if (
       (mode ?? PROTEIN_DISTRIBUTION.SEQUENTIAL) == PROTEIN_DISTRIBUTION.PATH
@@ -218,8 +218,8 @@ export default class Protein {
         this.err(`Error decomposing matrix, pairs length < 2.`);
         return false;
       }
-      rx = pairs[pairs.length - 1];
-      ry = pairs[pairs.length - 2];
+      ry = pairs[pairs.length - 1];
+      rx = pairs[pairs.length - 2];
     }
 
     console.log(`[info] l ${lenght} rx ${rx} ry ${ry}`);

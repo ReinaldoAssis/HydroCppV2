@@ -156,8 +156,8 @@ export default function Simulation2D(props: SimulationProps) {
 
   //TODO: add custom size
   let protein: Protein = new Protein(
-    size.width,
     size.height,
+    size.width,
     logger,
     seq,
     behavior == "Path"
