@@ -42,8 +42,8 @@ export default function Home(props: HomeProps) {
       >
         <h1>Welcome to HydroCpp!</h1>
         <div className="row">
-          <a href="https://vitejs.dev" target="_blank">
-            <img src="/vite.svg" className="logo vite" alt="Vite logo" />
+          <a href="https://github.com/ReinaldoAssis/hydrocppv2" target="_blank">
+            <img src="/HydroLogo.png" className="logo vite" alt="Hydro logo" />
           </a>
         </div>
         <div className="row">
