@@ -10,7 +10,6 @@ import {
 import Home from "./pages/Home";
 import { useContext, useEffect, useState } from "react";
 import Simulation from "./pages/Simulation2D";
-import { Config } from "./main";
 
 const DEFAULT_TAB = "home";
 
@@ -19,8 +18,6 @@ function App() {
   const [activeTab, setActiveTab] = useState<null | string>(DEFAULT_TAB);
 
   const [sequence, setSequence] = useState<string>("");
-
-  //let cf = useContext(Config)
 
   useEffect(() => {}, [sequence, activeTab]);
 

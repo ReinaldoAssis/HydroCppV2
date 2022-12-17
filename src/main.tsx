@@ -1,17 +1,12 @@
 import { SpotlightAction, SpotlightProvider } from "@mantine/spotlight";
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import Store, { Context } from "./store/Store";
 import "./style.css";
 
-export let Config = {
-  example_sim: (s: string) => {},
-  go_home: () => {},
-  set_matrix_size: () => {},
-};
-
 const Root = () => {
-  const UserContext = createContext(Config);
+  // const [state, setState] = useContext(Context);
 
   const actions: SpotlightAction[] = [
     {
@@ -32,18 +27,21 @@ const Root = () => {
       description: "Example simulation",
       onTrigger: () => {
         console.log("Running example");
-        Config.example_sim("ppphppphhhppphp");
+        // Config.example_sim("ppphppphhhppphp");
       },
       // icon: <IconFileText size={18} />,
     },
   ];
 
   return (
-    <SpotlightProvider shortcut={["mod + P", "mod + K", "/"]} actions={actions}>
-      <UserContext.Provider value={Config}>
+    <Store>
+      <SpotlightProvider
+        shortcut={["mod + P", "mod + K", "/"]}
+        actions={actions}
+      >
         <App />
-      </UserContext.Provider>
-    </SpotlightProvider>
+      </SpotlightProvider>
+    </Store>
   );
 };
 

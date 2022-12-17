@@ -1,22 +1,40 @@
 import React, { MutableRefObject, RefObject, useRef } from "react";
 import { useEffect } from "react";
 import p5 from "p5";
-import { Stack, Switch, Text } from "@mantine/core";
+import { NumberInput, Select, Stack, Switch, Text } from "@mantine/core";
 
-import Protein, { hydro, HydroMatrix } from "../processing/Protein";
+import Protein, {
+  hydro,
+  HydroMatrix,
+  PROTEIN_DISTRIBUTION,
+} from "../processing/Protein";
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 675;
 
-function Engine(props: { vibrant: boolean; matrix: HydroMatrix; p5ref: any }) {
+function Engine(props: {
+  vibrant: boolean;
+  grid: boolean;
+  matrix: HydroMatrix;
+  p5ref: any;
+  scalar: number;
+}) {
   let myp5: any = null;
   let p5ref: any = null;
-
-  let radius: number = 30;
   let matrix: HydroMatrix;
-
-  p5ref = props.p5ref; //React.createRef()
   matrix = props.matrix;
+
+  const scalar = props.scalar;
+
+  let offset = 30; //offset from (0,0)
+  let space = 15; //space between points //past: 5
+
+  let radius: number = 10 * scalar;
+
+  let point_radius: number = radius / 3;
+
+  let grid = props.grid;
+  p5ref = props.p5ref; //React.createRef()
 
   useEffect(() => {
     if (document.getElementsByClassName("p5Canvas").length == 1)
@@ -31,7 +49,7 @@ function Engine(props: { vibrant: boolean; matrix: HydroMatrix; p5ref: any }) {
       myp5 = new p5(Sketch, p5ref.current) as any;
 
     //     console.log(this.sequence);
-  }, [props.matrix, props.vibrant]);
+  }, [props.matrix, props.vibrant, props.grid]);
 
   let Sketch = (sketch: any) => {
     sketch.setup = () => {
@@ -59,15 +77,27 @@ function Engine(props: { vibrant: boolean; matrix: HydroMatrix; p5ref: any }) {
         sketch.ellipse(x, y, radius, radius);
       }
 
-      let space = 5;
-      let offset = 30;
+      function drawPoint(x: number, y: number, radius: number) {
+        sketch.fill(180, 180, 180);
+        sketch.noStroke();
+        sketch.ellipse(x, y, radius, radius);
+      }
 
+      //iterates through the matrix drawing each element
       for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
-          if (matrix[i][j].tipo.toLowerCase() == "h")
-            drawH(
+          //draw grid if enabled
+          if (grid)
+            drawPoint(
               i * (radius + space) + offset,
               j * (radius + space) + offset,
+              point_radius
+            );
+
+          if (matrix[i][j].tipo.toLowerCase() == "h")
+            drawH(
+              i * (radius + space) + offset, //TODO: estranho estar usando i no lugar de x quando j era para estar em seu lugar
+              j * (radius + space) + offset, //porem, esta funcionando
               radius
             );
           else if (matrix[i][j].tipo.toLowerCase() == "p")
@@ -92,13 +122,18 @@ interface SimulationProps {
 export default function Simulation2D(props: SimulationProps) {
   const [seq, setSeq] = React.useState(props.sequence);
   const [vibrant, setVibrant] = React.useState(false);
+  const [grid, setGrid] = React.useState(true);
+  const [behavior, setBehavior] = React.useState("Sequential");
+  const [scale, setScale] = React.useState(2.5);
 
   const rf = React.useRef();
 
-  useEffect(() => {}, [seq]);
+  useEffect(() => {}, [seq, behavior]);
 
   function forceUpdate() {
-    setSeq(props.sequence);
+    let aux = props.sequence;
+    //setSeq("");
+    setSeq(aux);
   }
 
   function logger(err: string) {
@@ -106,7 +141,14 @@ export default function Simulation2D(props: SimulationProps) {
   }
 
   //TODO: add custom size
-  let protein: Protein = new Protein(5, logger, seq);
+  let protein: Protein = new Protein(
+    15,
+    logger,
+    seq,
+    behavior == "Path"
+      ? PROTEIN_DISTRIBUTION.PATH
+      : PROTEIN_DISTRIBUTION.SEQUENTIAL
+  );
 
   return (
     <>
@@ -124,6 +166,8 @@ export default function Simulation2D(props: SimulationProps) {
             matrix={protein.protein_matrix}
             vibrant={vibrant}
             p5ref={rf}
+            grid={grid}
+            scalar={scale}
           />
         </div>
         <div style={{ width: "90%", paddingLeft: 20, paddingTop: 20 }}>
@@ -135,11 +179,44 @@ export default function Simulation2D(props: SimulationProps) {
             >
               Run
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSeq("");
+              }}
+              style={{ marginBottom: 10 }}
+            >
+              Clear
+            </button>
             <Switch
               label="Vibrant"
               size="md"
               checked={vibrant}
               onChange={(event) => setVibrant(event.currentTarget.checked)}
+            />
+            <Switch
+              label="Grid"
+              size="md"
+              checked={grid}
+              onChange={(event) => setGrid(event.currentTarget.checked)}
+            />
+            <Select
+              data={["Sequential", "Path"]}
+              label="Behavior"
+              onChange={(txt) => setBehavior(txt ?? "")}
+              placeholder="Sequential"
+            ></Select>
+
+            <NumberInput
+              defaultValue={2.6}
+              placeholder="1.5"
+              label="Scale"
+              variant="filled"
+              radius="xs"
+              size="md"
+              step={0.1}
+              precision={2}
+              onChange={(value) => setScale(value ?? 1.5)}
             />
             <Text size="xl">
               Score{" "}
