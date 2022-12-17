@@ -46,7 +46,6 @@ export default function Home(props: HomeProps) {
               id="greet-input"
               onChange={(e) => props.setSequence(e.currentTarget.value)}
               placeholder="Enter a sequence..."
-              value={"ppphhhhhphph"}
             />
             <button type="button" onClick={() => run()}>
               Run

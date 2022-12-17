@@ -1,22 +1,22 @@
 import React, { MutableRefObject, RefObject, useRef } from "react";
 import { useEffect } from "react";
 import p5 from "p5";
-import { Switch } from "@mantine/core";
+import { Stack, Switch, Text } from "@mantine/core";
 
-import { hydro, HydroMatrix } from "../processing/Protein";
+import Protein, { hydro, HydroMatrix } from "../processing/Protein";
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 675;
 
-function Engine(props: { vibrant: boolean; sequence: string; p5ref: any }) {
+function Engine(props: { vibrant: boolean; matrix: HydroMatrix; p5ref: any }) {
   let myp5: any = null;
   let p5ref: any = null;
 
   let radius: number = 30;
-  let sequence: string = "";
+  let matrix: HydroMatrix;
 
   p5ref = props.p5ref; //React.createRef()
-  sequence = props.sequence;
+  matrix = props.matrix;
 
   useEffect(() => {
     if (document.getElementsByClassName("p5Canvas").length == 1)
@@ -31,7 +31,7 @@ function Engine(props: { vibrant: boolean; sequence: string; p5ref: any }) {
       myp5 = new p5(Sketch, p5ref.current) as any;
 
     //     console.log(this.sequence);
-  }, [props.sequence, props.vibrant]);
+  }, [props.matrix, props.vibrant]);
 
   let Sketch = (sketch: any) => {
     sketch.setup = () => {
@@ -59,20 +59,23 @@ function Engine(props: { vibrant: boolean; sequence: string; p5ref: any }) {
         sketch.ellipse(x, y, radius, radius);
       }
 
-      let x = 80;
-      let y = 80;
-      let x_limit = CANVAS_WIDTH - 80;
-      //let y_limit = CANVAS_HEIGHT - 80;
-      for (var i = 0; i < sequence.length; i++) {
-        if (sequence[i].toLowerCase() == "h") {
-          drawH(x, y, radius);
-        } else if (sequence[i].toLowerCase() == "p") {
-          drawP(x, y, radius);
-        }
-        x += 2 * radius;
-        if (x > x_limit) {
-          x = 80;
-          y += 2 * radius;
+      let space = 5;
+      let offset = 30;
+
+      for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[i].length; j++) {
+          if (matrix[i][j].tipo.toLowerCase() == "h")
+            drawH(
+              i * (radius + space) + offset,
+              j * (radius + space) + offset,
+              radius
+            );
+          else if (matrix[i][j].tipo.toLowerCase() == "p")
+            drawP(
+              i * (radius + space) + offset,
+              j * (radius + space) + offset,
+              radius
+            );
         }
       }
     };
@@ -92,14 +95,18 @@ export default function Simulation2D(props: SimulationProps) {
 
   const rf = React.useRef();
 
-  useEffect(() => {
-    console.log("use effect force: " + seq);
-  }, [seq]);
+  useEffect(() => {}, [seq]);
 
   function forceUpdate() {
     setSeq(props.sequence);
-    console.log("force update");
   }
+
+  function logger(err: string) {
+    console.log(err);
+  }
+
+  //TODO: add custom size
+  let protein: Protein = new Protein(5, logger, seq);
 
   return (
     <>
@@ -113,22 +120,33 @@ export default function Simulation2D(props: SimulationProps) {
           id="canvas"
           ref={rf as unknown as RefObject<HTMLDivElement>}
         >
-          <Engine sequence={seq} vibrant={vibrant} p5ref={rf} />
+          <Engine
+            matrix={protein.protein_matrix}
+            vibrant={vibrant}
+            p5ref={rf}
+          />
         </div>
         <div style={{ width: "90%", paddingLeft: 20, paddingTop: 20 }}>
-          <button
-            type="button"
-            onClick={() => forceUpdate()}
-            style={{ marginBottom: 10 }}
-          >
-            Run
-          </button>
-          <Switch
-            label="Vibrant"
-            size="md"
-            checked={vibrant}
-            onChange={(event) => setVibrant(event.currentTarget.checked)}
-          />
+          <Stack>
+            <button
+              type="button"
+              onClick={() => forceUpdate()}
+              style={{ marginBottom: 10 }}
+            >
+              Run
+            </button>
+            <Switch
+              label="Vibrant"
+              size="md"
+              checked={vibrant}
+              onChange={(event) => setVibrant(event.currentTarget.checked)}
+            />
+            <Text size="xl">
+              Score{" "}
+              {Math.round((protein.process_score() + Number.EPSILON) * 100) /
+                100}{" "}
+            </Text>
+          </Stack>
         </div>
       </div>
     </>
