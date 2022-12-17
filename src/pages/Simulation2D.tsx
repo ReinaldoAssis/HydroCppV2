@@ -5,6 +5,7 @@ import {
   Drawer,
   Group,
   NumberInput,
+  ScrollArea,
   Select,
   Stack,
   Switch,
@@ -162,6 +163,9 @@ export default function Simulation2D(props: SimulationProps) {
 
   globalState.example_sim = exampleSim;
   globalState.random_sim = randomSim;
+  globalState.show_sequence = () => {
+    setOpened(!opened);
+  };
   useEffect(() => {}, [seq, behavior]);
 
   let size = decompose(seq.length);
@@ -298,20 +302,22 @@ export default function Simulation2D(props: SimulationProps) {
         position="bottom"
         onClose={() => setOpened(false)}
       >
-        <Group style={{ marginLeft: 20 }}>
-          {seq.split("").map((x) => {
-            let h = x.toLowerCase() == "h";
-            return (
-              <Text
-                className={h ? "blueSeq" : "redSeq"}
-                size="xl"
-                color={h ? "blue" : "red"}
-              >
-                {x.toUpperCase()}
-              </Text>
-            );
-          })}
-        </Group>
+        <ScrollArea style={{ height: 100 }} type="always">
+          <Group style={{ marginLeft: 20 }}>
+            {seq.split("").map((x) => {
+              let h = x.toLowerCase() == "h";
+              return (
+                <Text
+                  className={h ? "blueSeq" : "redSeq"}
+                  size="xl"
+                  color={h ? "blue" : "red"}
+                >
+                  {x.toUpperCase()}
+                </Text>
+              );
+            })}
+          </Group>
+        </ScrollArea>
       </Drawer>
     </>
   );
