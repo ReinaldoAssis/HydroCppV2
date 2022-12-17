@@ -262,8 +262,13 @@ export default function Simulation2D(props: SimulationProps) {
       >
         <Group style={{ marginLeft: 20 }}>
           {seq.split("").map((x) => {
+            let h = x.toLowerCase() == "h";
             return (
-              <Text size="xl" color={x.toLowerCase() == "h" ? "blue" : "red"}>
+              <Text
+                className={h ? "blueSeq" : "redSeq"}
+                size="xl"
+                color={h ? "blue" : "red"}
+              >
                 {x.toUpperCase()}
               </Text>
             );

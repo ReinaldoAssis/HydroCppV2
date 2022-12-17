@@ -114,3 +114,25 @@ button {
 .mantine-Drawer-drawer {
   background-color: rgb(30, 30, 30);
 }
+
+.blueSeq {
+  will-change: filter;
+  transition: 0.1s;
+  cursor: pointer;
+}
+
+.blueSeq:hover {
+  filter: drop-shadow(0 0 10px #24c8db) brightness(1.6);
+  transform: scale(1.1);
+}
+
+.redSeq {
+  will-change: filter;
+  transition: 0.1s;
+  cursor: pointer;
+}
+
+.redSeq:hover {
+  filter: drop-shadow(0 0 10px #db2424) brightness(1.6);
+  transform: scale(1.1);
+}
