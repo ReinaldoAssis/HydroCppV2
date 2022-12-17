@@ -11,7 +11,7 @@ import Home from "./pages/Home";
 import { useEffect, useState } from "react";
 import Simulation from "./pages/Simulation2D";
 
-const DEFAULT_TAB = "simulation";
+const DEFAULT_TAB = "home";
 
 function App() {
   const theme = useMantineTheme();
@@ -19,7 +19,7 @@ function App() {
 
   const [sequence, setSequence] = useState<string>("");
 
-  useEffect(() => {}, [sequence]);
+  useEffect(() => {}, [sequence, activeTab]);
 
   return (
     <Tabs

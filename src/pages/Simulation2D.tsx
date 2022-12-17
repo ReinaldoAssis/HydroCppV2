@@ -3,93 +3,10 @@ import { useEffect } from "react";
 import p5 from "p5";
 import { Switch } from "@mantine/core";
 
-// const s = (sketch: any) => {
-//   let x = 100;
-//   let y = 100;
-
-//   sketch.setup = () => {
-//     sketch.createCanvas(200, 200);
-//   };
-
-//   sketch.draw = () => {
-//     sketch.background(0);
-//     sketch.fill(255);
-//     sketch.rect(x, y, 50, 50);
-//   };
-// };
-
-// let myp5 = new p5(s);
+import { hydro, HydroMatrix } from "../processing/Protein";
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 675;
-
-// class Engine extends React.Component<{ vibrant: boolean; sequence: string }> {
-//   myp5: any = null;
-//   p5ref: any = null;
-
-//   radius: number = 30;
-//   sequence: string = "";
-
-//   constructor(props: any) {
-//     super(props);
-//     this.p5ref = React.createRef();
-//     this.sequence = props.sequence;
-//   }
-
-//   Sketch = (sketch: any) => {
-//     sketch.setup = () => {
-//       sketch.createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-//     };
-
-//     sketch.draw = () => {
-//       sketch.background(40, 40, 40);
-//       let vibrant = this.props.vibrant;
-
-//       function drawH(x: number, y: number, radius: number) {
-//         if (vibrant) sketch.fill(53, 106, 255);
-//         else sketch.fill(90, 90, 90);
-
-//         sketch.noStroke();
-//         sketch.ellipse(x, y, radius, radius);
-//       }
-
-//       function drawP(x: number, y: number, radius: number) {
-//         if (vibrant) sketch.fill(255, 43, 64);
-//         else sketch.fill(200, 200, 200);
-
-//         sketch.noStroke();
-//         sketch.ellipse(x, y, radius, radius);
-//       }
-
-//       let x = 100;
-//       let y = 100;
-//       for (var i = 0; i < this.sequence.length; i++) {
-//         if (this.sequence[i].toLowerCase() == "h") {
-//           drawH(50 + x, 50, this.radius);
-//         } else if (this.sequence[i].toLowerCase() == "p") {
-//           drawP(100 + x, 100, this.radius);
-//         }
-//         x += 2 * this.radius;
-//       }
-//       //console.log(this.sequence);
-//       //   drawH(50, 50, this.radius);
-//       //   drawP(100, 50, this.radius);
-//     };
-//   };
-
-//   componentDidMount() {
-//     if (this.myp5 == null)
-//       // test if already initialized
-//       this.myp5 = new p5(this.Sketch, this.p5ref.current) as any;
-
-//     console.log(this.sequence);
-//   }
-
-//   render() {
-//     //console.log("render");
-//     return <div ref={this.p5ref}></div>;
-//   }
-// }
 
 function Engine(props: { vibrant: boolean; sequence: string; p5ref: any }) {
   let myp5: any = null;
@@ -114,7 +31,7 @@ function Engine(props: { vibrant: boolean; sequence: string; p5ref: any }) {
       myp5 = new p5(Sketch, p5ref.current) as any;
 
     //     console.log(this.sequence);
-  }, [props.sequence]);
+  }, [props.sequence, props.vibrant]);
 
   let Sketch = (sketch: any) => {
     sketch.setup = () => {
@@ -142,15 +59,21 @@ function Engine(props: { vibrant: boolean; sequence: string; p5ref: any }) {
         sketch.ellipse(x, y, radius, radius);
       }
 
-      let x = 100;
-      let y = 100;
+      let x = 80;
+      let y = 80;
+      let x_limit = CANVAS_WIDTH - 80;
+      //let y_limit = CANVAS_HEIGHT - 80;
       for (var i = 0; i < sequence.length; i++) {
         if (sequence[i].toLowerCase() == "h") {
-          drawH(50 + x, 50, radius);
+          drawH(x, y, radius);
         } else if (sequence[i].toLowerCase() == "p") {
-          drawP(100 + x, 100, radius);
+          drawP(x, y, radius);
         }
         x += 2 * radius;
+        if (x > x_limit) {
+          x = 80;
+          y += 2 * radius;
+        }
       }
     };
   };
@@ -165,6 +88,7 @@ interface SimulationProps {
 
 export default function Simulation2D(props: SimulationProps) {
   const [seq, setSeq] = React.useState(props.sequence);
+  const [vibrant, setVibrant] = React.useState(false);
 
   const rf = React.useRef();
 
@@ -189,7 +113,7 @@ export default function Simulation2D(props: SimulationProps) {
           id="canvas"
           ref={rf as unknown as RefObject<HTMLDivElement>}
         >
-          <Engine sequence={seq} vibrant={false} p5ref={rf} />
+          <Engine sequence={seq} vibrant={vibrant} p5ref={rf} />
         </div>
         <div style={{ width: "90%", paddingLeft: 20, paddingTop: 20 }}>
           <button
@@ -199,7 +123,12 @@ export default function Simulation2D(props: SimulationProps) {
           >
             Run
           </button>
-          <Switch label="Vibrant" size="md" />
+          <Switch
+            label="Vibrant"
+            size="md"
+            checked={vibrant}
+            onChange={(event) => setVibrant(event.currentTarget.checked)}
+          />
         </div>
       </div>
     </>
