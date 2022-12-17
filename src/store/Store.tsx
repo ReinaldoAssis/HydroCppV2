@@ -6,6 +6,8 @@ export interface State {
   example_sim?: (s: string) => void;
   go_home?: () => void;
   set_matrix_size?: (s: string) => void;
+  random_sim?: () => void;
+  text_file?: string;
 }
 
 export let globalState: State = {
