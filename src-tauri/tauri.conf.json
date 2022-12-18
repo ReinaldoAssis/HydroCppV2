@@ -55,7 +55,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 750,
+        "height": 770,
         "resizable": true,
         "title": "Hydrocpp",
         "width": 820
