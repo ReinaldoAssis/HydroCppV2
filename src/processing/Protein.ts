@@ -13,7 +13,7 @@ export enum PROTEIN_DISTRIBUTION {
   PATH,
 }
 
-class nary_tree {
+export class nary_tree {
   data: string;
   path_score: number;
   children: Array<nary_tree>; //0: down, 1: left, 2: up, 3: right
@@ -341,19 +341,17 @@ export default class Protein {
   }
 
   maximize(sequence: string) {
-    let wholes = Math.floor(sequence.length / 5);
-    let rest = sequence.length % 5;
-
-    function local_maximize(local_sequence: string) {
-      //repeat for eacth block of 5
-      for (let t = 0; t < wholes; t++) {}
-    }
-
-    //generate n-ary tree
-    //n = 5
-    let root: nary_tree = new nary_tree(sequence[0]);
-    root.make(root, sequence, 0);
-    console.log(root);
+    // let wholes = Math.floor(sequence.length / 5);
+    // let rest = sequence.length % 5;
+    // function local_maximize(local_sequence: string) {
+    //   //repeat for eacth block of 5
+    //   for (let t = 0; t < wholes; t++) {}
+    // }
+    // //generate n-ary tree
+    // //n = 5
+    // let root: nary_tree = new nary_tree(sequence[0]);
+    // root.make(root, sequence, 0);
+    // console.log(root);
   }
 
   get width(): number {

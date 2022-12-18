@@ -4,6 +4,7 @@ import p5 from "p5";
 import {
   Drawer,
   Group,
+  Modal,
   NumberInput,
   ScrollArea,
   Select,
@@ -17,10 +18,12 @@ import Protein, {
   decompose,
   hydro,
   HydroMatrix,
+  nary_tree,
   PROTEIN_DISTRIBUTION,
 } from "../processing/Protein";
 import { globalState } from "../store/Store";
 import { showNotification } from "@mantine/notifications";
+import { useDisclosure } from "@mantine/hooks";
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 675;
@@ -141,6 +144,8 @@ export default function Simulation2D(props: SimulationProps) {
   const [scale, setScale] = React.useState(2.5);
   const [opened, setOpened] = React.useState(false);
 
+  const [openedModal, { close, open }] = useDisclosure(false);
+
   const rf = React.useRef();
   const theme = useMantineTheme();
 
@@ -161,8 +166,16 @@ export default function Simulation2D(props: SimulationProps) {
     setSeq(s);
   }
 
+  function showTree() {
+    let root: nary_tree = new nary_tree(seq[0]);
+    root.make(root, seq, 0);
+    console.log(root);
+    open();
+  }
+
   globalState.example_sim = exampleSim;
   globalState.random_sim = randomSim;
+  globalState.show_tree = showTree;
   globalState.show_sequence = () => {
     setOpened(!opened);
   };
@@ -335,6 +348,13 @@ export default function Simulation2D(props: SimulationProps) {
           </Group>
         </ScrollArea>
       </Drawer>
+
+      <Modal
+        opened={openedModal}
+        onClose={close}
+        centered
+        withCloseButton={false}
+      ></Modal>
     </>
   );
 }

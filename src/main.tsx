@@ -66,6 +66,15 @@ const actions: SpotlightAction[] = [
 
     // icon: <IconFileText size={18} />,
   },
+  {
+    title: "Generate Tree",
+    description: "Generate and display n-ary tree | alias: 'tree'",
+    onTrigger: () => {
+      globalState.show_tree?.();
+    },
+
+    // icon: <IconFileText size={18} />,
+  },
 ];
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

@@ -10,6 +10,7 @@ export interface State {
   text_file?: string;
   rndSize?: number;
   show_sequence?: () => void;
+  show_tree?: () => void;
 }
 
 export let globalState: State = {
