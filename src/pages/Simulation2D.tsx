@@ -240,6 +240,15 @@ export default function Simulation2D(props: SimulationProps) {
             >
               Sequence
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                protein.maximize(seq);
+              }}
+              style={{ marginBottom: 10 }}
+            >
+              Maximize
+            </button>
             <Switch
               label="Vibrant"
               size="md"

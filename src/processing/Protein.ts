@@ -13,6 +13,44 @@ export enum PROTEIN_DISTRIBUTION {
   PATH,
 }
 
+class nary_tree {
+  data: string;
+  path_score: number;
+  children: Array<nary_tree>; //0: down, 1: left, 2: up, 3: right
+
+  constructor(_data: string, _children?: Array<nary_tree>) {
+    this.data = _data;
+    this.children = _children ?? new Array<nary_tree>(4);
+    this.path_score = 0;
+  }
+
+  set score(_score: number) {
+    this.path_score = _score;
+  }
+
+  get score() {
+    return this.path_score;
+  }
+
+  get_nth_child(n: number) {
+    return this.children[n];
+  }
+
+  make(root: nary_tree, sequence: string, index: number) {
+    if (index >= sequence.length) return;
+    root.data = sequence[index];
+    root.children = new Array<nary_tree>(4);
+
+    // console.log(`adding ${sequence[index]}`);
+
+    index++;
+    for (let i = 0; i < 4; i++) {
+      root.children[i] = new nary_tree(sequence[index]);
+      root.make(root.children[i], sequence, index);
+    }
+  }
+}
+
 export function decompose(size: number): { width: number; height: number } {
   //stores the possible ways to represent the matrix
   //i.e 15 could be represented as 3 x 5
@@ -222,7 +260,7 @@ export default class Protein {
       rx = pairs[pairs.length - 2];
     }
 
-    console.log(`[info] l ${lenght} rx ${rx} ry ${ry}`);
+    // console.log(`[info] l ${lenght} rx ${rx} ry ${ry}`);
 
     //---------------------------
 
@@ -300,6 +338,22 @@ export default class Protein {
     }
 
     return true;
+  }
+
+  maximize(sequence: string) {
+    let wholes = Math.floor(sequence.length / 5);
+    let rest = sequence.length % 5;
+
+    function local_maximize(local_sequence: string) {
+      //repeat for eacth block of 5
+      for (let t = 0; t < wholes; t++) {}
+    }
+
+    //generate n-ary tree
+    //n = 5
+    let root: nary_tree = new nary_tree(sequence[0]);
+    root.make(root, sequence, 0);
+    console.log(root);
   }
 
   get width(): number {
