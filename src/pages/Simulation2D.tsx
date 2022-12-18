@@ -212,7 +212,14 @@ export default function Simulation2D(props: SimulationProps) {
             scalar={scale}
           />
         </div>
-        <div style={{ width: "90%", paddingLeft: 20, paddingTop: 20 }}>
+        <div
+          style={{
+            width: "90%",
+            paddingLeft: 15,
+            paddingRight: 15,
+            paddingTop: 20,
+          }}
+        >
           <Stack>
             <button
               type="button"
