@@ -1,7 +1,13 @@
-# Tauri + React + Typescript
+# HydroCpp
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+![logo]("./public/HydroLogo.png")
 
-## Recommended IDE Setup
+This is a project based on the concept of HP model prediction, it was made as an assigment of Data Sctructure course.
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+# Screenshots
+
+![](https://i.imgur.com/lu7EMmd.png)
+
+![](https://i.imgur.com/ZBiiDdA.png)
+
+![](https://i.imgur.com/PG9f12f.png)
