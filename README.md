@@ -1,6 +1,6 @@
 # HydroCpp
 
-![logo]("./public/HydroLogo.png")
+![logo](/public/HydroLogo.png)
 
 This is a project based on the concept of HP model prediction, it was made as an assigment of Data Sctructure course.
 
