@@ -24,6 +24,7 @@ import Protein, {
 import { globalState } from "../store/Store";
 import { showNotification } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
+import Tree from "./Tree";
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 675;
@@ -143,6 +144,7 @@ export default function Simulation2D(props: SimulationProps) {
   const [behavior, setBehavior] = React.useState("Path");
   const [scale, setScale] = React.useState(2.5);
   const [opened, setOpened] = React.useState(false);
+  //const [tree, setTree] = React.useState<nary_tree>(new nary_tree("x"));
 
   const [openedModal, { close, open }] = useDisclosure(false);
 
@@ -170,6 +172,7 @@ export default function Simulation2D(props: SimulationProps) {
     let root: nary_tree = new nary_tree(seq[0]);
     root.make(root, seq, 0);
     console.log(root);
+    //setTree(root);
     open();
   }
 
@@ -354,7 +357,9 @@ export default function Simulation2D(props: SimulationProps) {
         onClose={close}
         centered
         withCloseButton={false}
-      ></Modal>
+      >
+        <Tree tree={seq} showTitle={true} />
+      </Modal>
     </>
   );
 }

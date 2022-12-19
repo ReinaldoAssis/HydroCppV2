@@ -49,6 +49,23 @@ export class nary_tree {
       root.make(root.children[i], sequence, index);
     }
   }
+
+  is_leaf() {
+    if (this.children == undefined) return true;
+    else if (this.children.length == 0) return true;
+
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i] != undefined) return false;
+    }
+
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i] == undefined) continue;
+      if (this.children[i].data != "") return false;
+      else if (this.children[i].data.toLowerCase() != "x") return false;
+    }
+
+    return true;
+  }
 }
 
 export function decompose(size: number): { width: number; height: number } {
