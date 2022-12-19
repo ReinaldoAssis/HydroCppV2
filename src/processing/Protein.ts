@@ -1,3 +1,28 @@
+export class pVector {
+  x: number;
+  y: number;
+  c: string;
+
+  constructor(x: number, y: number, c: string) {
+    this.x = x;
+    this.y = y;
+    this.c = c;
+  }
+
+  move(x: number, y: number) {
+    this.x += x;
+    this.y += y;
+  }
+
+  moveX(x: number) {
+    this.x += x;
+  }
+
+  moveY(y: number) {
+    this.y += y;
+  }
+}
+
 export type hydro = {
   charge: number;
   tipo: string;
@@ -110,6 +135,7 @@ export default class Protein {
   private _height: number;
   private matrix: HydroMatrix;
   private err: (_err: string) => void;
+  private _path: Array<pVector> = new Array<pVector>();
 
   emptyElement: hydro = {
     charge: -1,
@@ -138,6 +164,14 @@ export default class Protein {
     }
 
     this.append(sequence, 0, mode);
+  }
+
+  get path() {
+    return this._path;
+  }
+
+  add_to_path(x: number, y: number, c: string) {
+    this._path.push(new pVector(x, y, c));
   }
 
   set(el: hydro, x: number, y: number): boolean {
@@ -192,6 +226,7 @@ export default class Protein {
         y: y,
         id: i,
       };
+      this.add_to_path(x, y, sequence[i]);
       x++;
       if (x >= this._width) {
         x = 0;
@@ -230,6 +265,7 @@ export default class Protein {
 
     //sets element in current position with default values
     const place = (el: string, id: number): boolean => {
+      this.add_to_path(pos.x, pos.y, el);
       return this.set(
         {
           charge: 0,

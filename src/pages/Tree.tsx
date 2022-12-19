@@ -1,22 +1,38 @@
 import { Group, Text } from "@mantine/core";
 import { randInt } from "three/src/math/MathUtils";
-import { nary_tree } from "../processing/Protein";
+import { pVector } from "../processing/Protein";
 
 interface NAryTreeProps {
-  tree: string;
+  tree: Array<pVector>;
   showTitle?: boolean;
 }
 
 export default function NAryTree(props: NAryTreeProps) {
   //down, left, up, right
   return (
-    <div>
+    <div
+      style={{
+        alignContent: "center",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {props.showTitle && <h3>N-ary Tree</h3>}
-      <Group>
-        {/* {props.tree.split("").map((char, index) => {
-          return <></>;
-        })} */}
-      </Group>
+      {props.tree.map((node, index) => {
+        let h = node.c.toLowerCase() == "h";
+
+        return (
+          <div style={{ width: "fit-content", margin: 0 }}>
+            <Text
+              className={h ? "blueSeq" : "redSeq"}
+              size="xl"
+              color={h ? "blue" : "red"}
+            >
+              {node.c.toUpperCase()}
+            </Text>
+          </div>
+        );
+      })}
     </div>
   );
 }

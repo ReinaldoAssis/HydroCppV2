@@ -358,7 +358,7 @@ export default function Simulation2D(props: SimulationProps) {
         centered
         withCloseButton={false}
       >
-        <Tree tree={seq} showTitle={true} />
+        <Tree tree={protein.path} showTitle={true} />
       </Modal>
     </>
   );
