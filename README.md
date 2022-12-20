@@ -1,10 +1,20 @@
 # HydroCpp
 
 <p align="center">
-<img src="/public/HydroLogo.png" alt="logo" height="300"/>
+<img src="/public/HydroLogo.png" alt="logo" height="200"/>
 </p>
 
-This is a project based on the concept of HP model prediction, it was made as an assigment of Data Sctructure course.
+<div style="display:in-line">
+<p align="center">
+<img src="https://img.shields.io/github/repo-size/reinaldoassis/hydrocppv2" alt="size" />
+<img src="https://img.shields.io/tokei/lines/github/reinaldoassis/hydrocppv2" alt="lines of code" />
+</p>
+
+</div>
+
+# About
+
+This is a project based on the concept of HP model prediction, it was made as an assigment of Data Sctructure course. 
 
 # Screenshots
 
